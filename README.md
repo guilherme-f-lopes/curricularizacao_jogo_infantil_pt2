@@ -5,3 +5,4 @@ Integrantes do grupo:
 - Dexter Schmitt
 - Gabriel Henrique Zingelerski
 - Vinicius Baptista
+- Deivid Nascimento
