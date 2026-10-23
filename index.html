@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jogo da Aventura</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Símbolos SVG reutilizáveis -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="star" viewBox="0 0 24 24"><path d="M12 1.8l3 6.9 7.5.7-5.7 5 1.8 7.3L12 17.8 5.4 21.7l1.8-7.3-5.7-5 7.5-.7z"/></symbol>
+
+    <symbol id="mascot" viewBox="0 0 140 140">
+      <circle cx="70" cy="70" r="70" fill="#52c8e8"/>
+      <ellipse cx="50" cy="62" rx="9" ry="12.5" fill="#fff"/>
+      <ellipse cx="90" cy="62" rx="9" ry="12.5" fill="#fff"/>
+      <circle cx="51" cy="66" r="5" fill="#1f2a44"/>
+      <circle cx="89" cy="66" r="5" fill="#1f2a44"/>
+      <ellipse cx="31" cy="96" rx="12" ry="8" fill="#b9a9c4"/>
+      <ellipse cx="109" cy="96" rx="12" ry="8" fill="#b9a9c4"/>
+      <path d="M52 110 Q70 102 88 110 Q70 123 52 110 Z" fill="none" stroke="#1f2a44" stroke-width="4" stroke-linejoin="round"/>
+    </symbol>
+
+    <symbol id="mascot-party" viewBox="0 0 170 170">
+      <circle cx="85" cy="85" r="82" fill="#ffa633" stroke="#fff" stroke-width="6"/>
+      <ellipse cx="55" cy="72" rx="13" ry="8" fill="#1f2a44"/>
+      <ellipse cx="115" cy="72" rx="13" ry="8" fill="#1f2a44"/>
+      <ellipse cx="38" cy="102" rx="14" ry="9" fill="#ffd2a6"/>
+      <ellipse cx="132" cy="102" rx="14" ry="9" fill="#ffd2a6"/>
+      <path d="M58 118 Q85 104 112 118 Q85 134 58 118 Z" fill="none" stroke="#1f2a44" stroke-width="5" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="viewport" id="viewport">
+  <div class="stage" id="stage">
+
+    <!-- ===== 01 · TELA DE NOME ===== -->
+    <section class="screen active" id="s-nome">
+      <div class="deco d-blue" style="left:-140px;top:-160px;width:420px;height:420px"></div>
+      <div class="deco d-orange" style="left:1180px;top:520px;width:360px;height:360px"></div>
+      <div class="deco d-yellow" style="left:1150px;top:60px;width:90px;height:90px"></div>
+
+      <div class="card-nome">
+        <svg class="mascote" viewBox="0 0 140 140"><use href="#mascot"/></svg>
+        <h1>Qual é o seu nome?</h1>
+        <p class="sub">Digite seu nome para começar a aventura!</p>
+        <input id="nome" class="campo" type="text" maxlength="14" placeholder="Ex: Sofia" autocomplete="off" aria-label="Seu nome">
+        <button class="btn btn-laranja" id="btn-nome">Vamos jogar! <i class="seta"></i></button>
+      </div>
+    </section>
+
+    <!-- ===== 02 · SELEÇÃO DE DIFICULDADE ===== -->
+    <section class="screen" id="s-nivel">
+      <div class="deco d-yellow-big" style="left:-120px;top:500px;width:380px;height:380px"></div>
+      <div class="deco d-blue" style="left:1220px;top:-100px;width:300px;height:300px"></div>
+
+      <div class="conteudo-nivel">
+        <h2>Escolha a dificuldade</h2>
+        <p class="sub">Escolha o nível que combina com você!</p>
+
+        <div class="niveis">
+          <button class="nivel-card" data-nivel="facil">
+            <span class="chip-sel">SELECIONADO</span>
+            <span class="distintivo verde"><svg class="st"><use href="#star"/></svg></span>
+            <strong>Fácil</strong>
+            <span class="desc">Perguntas simples e tempo tranquilo.</span>
+          </button>
+          <button class="nivel-card" data-nivel="medio">
+            <span class="chip-sel">SELECIONADO</span>
+            <span class="distintivo laranja"><svg class="st"><use href="#star"/></svg><svg class="st"><use href="#star"/></svg></span>
+            <strong>Normal</strong>
+            <span class="desc">Equilíbrio entre desafio e diversão.</span>
+          </button>
+          <button class="nivel-card" data-nivel="dificil">
+            <span class="chip-sel">SELECIONADO</span>
+            <span class="distintivo vermelho"><svg class="st"><use href="#star"/></svg><svg class="st"><use href="#star"/></svg><svg class="st"><use href="#star"/></svg></span>
+            <strong>Difícil</strong>
+            <span class="desc">Para quem já é expert no jogo!</span>
+          </button>
+        </div>
+
+        <button class="btn btn-laranja" id="btn-continuar" disabled>Continuar <i class="seta"></i></button>
+      </div>
+    </section>
+
+    <!-- ===== 04 · TABULEIRO ===== -->
+    <section class="screen" id="s-tabuleiro">
+      <div class="deco d-blue" style="left:-110px;top:-120px;width:300px;height:300px"></div>
+      <h2 class="titulo-tab">Tabuleiro da Aventura</h2>
+      <div class="pill pill-branca" id="tab-nome" style="left:980px;top:58px">Sofia</div>
+      <div class="pill pill-amarela" id="tab-pontos" style="left:1130px;top:58px">★ 0 pontos</div>
+
+      <svg class="trilha" id="trilha" width="1366" height="768" viewBox="0 0 1366 768"></svg>
+      <div id="nos"></div>
+      <div class="avatar" id="avatar">
+        <svg viewBox="0 0 140 140"><use href="#mascot"/></svg>
+        <i class="ponteiro"></i>
+      </div>
+
+      <button class="btn btn-laranja" id="btn-prox" style="left:50%;top:640px">Próxima pergunta <i class="seta"></i></button>
+    </section>
+
+    <!-- ===== 03 · PERGUNTA ===== -->
+    <section class="screen" id="s-pergunta">
+      <div class="deco d-purple" style="left:1220px;top:-100px;width:320px;height:320px"></div>
+      <div class="deco d-blue" style="left:-100px;top:560px;width:260px;height:260px"></div>
+
+      <div class="barra-topo">
+        <div class="pill pill-branca" id="q-contador">Pergunta 1 de 10</div>
+        <div class="pill pill-nivel" id="q-nivel">★★ Normal</div>
+      </div>
+
+      <div class="card-pergunta" id="card-q">
+        <button class="btn-ouvir" id="btn-ouvir" aria-label="Ouvir a pergunta de novo" title="Ouvir de novo">
+          <svg viewBox="0 0 24 24" width="30" height="30"><path fill="#fff" d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg>
+        </button>
+        <h3 id="q-texto"></h3>
+        <div class="img-pergunta" id="q-img"></div>
+        <div class="respostas" id="q-respostas"></div>
+      </div>
+
+      <div class="trilha-prog"><div class="prog-fill" id="prog-fill"></div></div>
+
+      <!-- Faixa de feedback (aparece sobre a barra de progresso) -->
+      <div class="feedback" id="feedback" hidden>
+        <svg class="fb-mascote" viewBox="0 0 140 140"><use href="#mascot"/></svg>
+        <div class="fb-texto">
+          <strong id="fb-titulo"></strong>
+          <span id="fb-msg"></span>
+        </div>
+        <button class="btn btn-laranja btn-fb" id="btn-fb">Continuar <i class="seta"></i></button>
+      </div>
+    </section>
+
+    <!-- ===== 05 · FINALIZAÇÃO ===== -->
+    <section class="screen" id="s-final">
+      <div id="confete"></div>
+      <svg class="mascote-final" viewBox="0 0 170 170"><use href="#mascot-party"/></svg>
+      <h2 class="parabens" id="f-titulo">Parabéns!</h2>
+      <p class="sub-final" id="f-sub">Você completou o desafio com sucesso!</p>
+      <div class="estrelas" id="f-estrelas"></div>
+
+      <div class="stats">
+        <div class="stat"><b class="c-laranja" id="f-pontos">0</b><span>PONTOS</span></div>
+        <div class="stat"><b class="c-verde" id="f-acertos">0/10</b><span>ACERTOS</span></div>
+        <div class="stat"><b class="c-azul" id="f-nivel">Normal</b><span>NÍVEL</span></div>
+      </div>
+
+      <div class="botoes-final">
+        <button class="btn btn-laranja" id="btn-again">Jogar novamente</button>
+        <button class="btn btn-contorno" id="btn-inicio">Voltar ao início</button>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script src="perguntas.js"></script>
+<script src="jogo.js"></script>
+</body>
+</html>
